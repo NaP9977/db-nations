@@ -17,7 +17,7 @@ public class DumpNations {
             "from countries \n" +
             "join regions on regions.region_id = countries.region_id\n" +
             "join continents on continents.continent_id = regions.continent_id \n" +
-            "where countries.name like '%ita%';";
+            "where countries.name like ?;";
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -39,21 +39,19 @@ public class DumpNations {
             System.out.println("Inserisci la parola che vuoi usare come parametro di ricerca");
             String research = scanner.nextLine();
             System.out.println("Ricerca per " + research);
-            try(PreparedStatement preparedStatement = connection.prepareStatement(SQL_research)){
-             preparedStatement.setString(1,research);
-             try(ResultSet resultSet = preparedStatement.executeQuery()){
-                 if(resultSet.next()){
-                     String result = research;
-                     System.out.print("Il risultato della ricerca è: " + result); }
-                     else{
-                         System.out.print("Nessun risultato corrispondente");
-                     }
-                 }
-
-             }
-        } catch (SQLException exception) {
-            System.out.println("Errore nello svolgimento dell'operazione");
-        }
-
-    }
+            try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_research)) {
+                preparedStatement.setString(1, "%" + research + "%");
+                try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                    while (resultSet.next()) {
+                        String result = resultSet.getString("countries_name");
+                      System.out.println("Il risultato della ricerca è: " + result);
 }
+                }
+
+            }
+            } catch (SQLException exception) {
+                System.out.println("Errore nello svolgimento dell'operazione");
+            }
+
+        }
+    }
