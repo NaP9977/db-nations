@@ -10,8 +10,14 @@ public class DumpNations {
     private final static String SQL_countries = "select countries.name as countries_name, country_id , regions.name as region_name, continents.name as continent_name\n" +
             "from countries \n" +
             "join regions on regions.region_id = countries.region_id\n" +
-            "join continents where continents.continent_id = regions.continent_id \n" +
+            "join continents on continents.continent_id = regions.continent_id \n" +
             "order by countries.name asc;";
+
+    private final static String SQL_research = "select countries.name as countries_name, country_id , regions.name as region_name, continents.name as continent_name\n" +
+            "from countries \n" +
+            "join regions on regions.region_id = countries.region_id\n" +
+            "join continents on continents.continent_id = regions.continent_id \n" +
+            "where countries.name like '%ita%';";
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -30,8 +36,23 @@ public class DumpNations {
                     }
                 }
             }
+            System.out.println("Inserisci la parola che vuoi usare come parametro di ricerca");
+            String research = scanner.nextLine();
+            System.out.println("Ricerca per " + research);
+            try(PreparedStatement preparedStatement = connection.prepareStatement(SQL_research)){
+             preparedStatement.setString(1,research);
+             try(ResultSet resultSet = preparedStatement.executeQuery()){
+                 if(resultSet.next()){
+                     String result = research;
+                     System.out.print("Il risultato della ricerca è: " + result); }
+                     else{
+                         System.out.print("Nessun risultato corrispondente");
+                     }
+                 }
+
+             }
         } catch (SQLException exception) {
-            System.out.println("Errore nella ricerca");
+            System.out.println("Errore nello svolgimento dell'operazione");
         }
 
     }
