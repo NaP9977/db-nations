@@ -43,13 +43,13 @@ public class DumpNations {
                 preparedStatement.setString(1, "%" + research + "%");
                 try (ResultSet resultSet = preparedStatement.executeQuery()) {
                     while (resultSet.next()) {
-                        String result = resultSet.getString("countries_name");
-                      System.out.println("Il risultato della ricerca è: " + result);
-}
+                            String result = resultSet.getString("countries_name");
+                            System.out.println("Il risultato della ricerca è: " + result);
+                        }
+                    }
                 }
 
-            }
-            } catch (SQLException exception) {
+        } catch (SQLException exception) {
                 System.out.println("Errore nello svolgimento dell'operazione");
             }
 
